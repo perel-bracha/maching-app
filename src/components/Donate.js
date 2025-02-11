@@ -76,7 +76,7 @@ export function Donate() {
       {filteredApartments.length > 0 && (
         <ul>
           {filteredApartments.map((apartment, index) => (
-            <li key={index} onClick={() => setDonate({ ...donate, apartment })}>
+            <li key={index} onClick={() => setApartment(apartment)}>
               {apartment}
             </li>
           ))}

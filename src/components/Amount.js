@@ -16,9 +16,9 @@ export default function Amount() {
   });
   const percentCompletion = Math.floor((amount / destination) * 100);
   return (
-    <div>
-      <h1 className="pin2">השגנו עד כה: ₪{amount} </h1>
-      <h1>היעד: ₪80,000</h1>
+    <div className="totalAmount">
+      <h2 className="pin2">השגנו עד כה: ₪{amount} </h2>
+      <h3>היעד: ₪80,000</h3>
       <SliderMy percents={percentCompletion} />
     </div>
   );

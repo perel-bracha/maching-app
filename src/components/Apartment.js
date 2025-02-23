@@ -29,11 +29,14 @@ export default function Apartment() {
   const showGirls = girls.map((girl, index) => (
     <GirlAmount key={index} girl={girl} />
   ));
+  const target=8000;
+  const percentCompletion = Math.floor((apartment.totalDonations / target) * 100);
+
   return (
-    <div>
-      <h1>{apartment.apart_name}</h1>
-      <h1>סכום כולל: ₪{apartment.totalDonations}</h1>
-      {/* <SliderMy /> */}
+    <div className="apartmentTotal">
+      <h2>{apartment.apart_name}</h2>
+      <h3>סכום כולל: ₪{apartment.totalDonations}</h3>
+      <SliderMy percents={percentCompletion}/>
       {showGirls}
     </div>
   );

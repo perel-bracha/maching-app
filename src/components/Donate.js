@@ -1,7 +1,8 @@
 import { use, useEffect } from "react";
 import { useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import Swal from "sweetalert2";
+import UploadExcel from "./Excel";
 
 export function Donate() {
   const { donateId } = useParams();
@@ -124,6 +125,7 @@ export function Donate() {
     ) {
       donate.amount = parseInt(donate.amount);
       donate.verified = donate.verified ? 1 : 0;
+      donate.donation_date = formatDate(donate.donation_date);
       console.log(JSON.stringify(donate));
 
       fetch(`http://localhost:8080/donations/${donateToUpdate.id}`, {
@@ -193,137 +195,161 @@ export function Donate() {
       })
       .catch((error) => console.log(error));
   }, [apartment]);
-
+  const navigate = useNavigate();
   return (
-    <form onSubmit={donateToUpdate.id ? handleUpdateDonation : handleAddDonation}>
-      <h3>הוספת תרומה</h3>
-      <input
-        id="amount"
-        type="number"
-        placeholder="סכום התרומה"
-        value={donate.amount || ""}
-        onChange={(e) => setDonate({ ...donate, amount: e.target.value })}
-      />
-      <input
-        id="name"
-        type="text"
-        placeholder="שם התורם"
-        value={donate.donor_name}
-        onChange={(e) => setDonate({ ...donate, donor_name: e.target.value })}
-      />
-      <div className="input-container">
+    <>
+    <UploadExcel path={`donations`}/>
+      <button onClick={() => navigate("/donations/notVerified")}>תרומות לא מאומתות</button>
+      <form
+        onSubmit={donateToUpdate.id ? handleUpdateDonation : handleAddDonation}
+      >
+        <h3>הוספת תרומה</h3>
         <input
-          id="how"
-          type="text"
-          placeholder="אופן התרומה"
-          value={donate.how}
-          readOnly
-          onFocus={() => {
-            setShowHowDropdown(true);
-          }}
-          onBlur={() => setTimeout(() => setShowHowDropdown(false), 100)}
+          id="amount"
+          type="number"
+          placeholder="סכום התרומה"
+          value={donate.amount || ""}
+          onChange={(e) => setDonate({ ...donate, amount: e.target.value })}
         />
-        {showHowDropdown && (
-          <ul className="dropdown">
-            {howArray.map((way, index) => (
-              <li
-                key={index}
-                onClick={() => {
-                  setDonate({ ...donate, how: way });
-                  setShowHowDropdown(false);
-                }}
-              >
-                {way}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-      <div className="input-container">
         <input
-          id="apartment"
+          id="name"
           type="text"
-          placeholder="דירה"
-          value={apartment.apart_name || ""}
-          readOnly
-          onFocus={() => {
-            setShowApartmentDropdown(true);
-            setFilteredApartments(apartments);
-          }}
-          onBlur={() => setTimeout(() => setShowApartmentDropdown(false), 100)}
+          placeholder="שם התורם"
+          value={donate.donor_name}
+          onChange={(e) => setDonate({ ...donate, donor_name: e.target.value })}
         />
-        {showApartmentDropdown && filteredApartments.length > 0 && (
-          <ul className="dropdown">
-            {filteredApartments.map((apartment, index) => (
-              <li
-                key={index}
-                onClick={() => {
-                  console.log(`in clickapart`);
-                  setApartment(apartment);
-                  if (
-                    girl &&
-                    girl.apartment_id &&
-                    girl.apartment_id != apartment.apartment_id
-                  )
-                    setGirl({});
-                  setShowApartmentDropdown(false);
-                }}
-              >
-                {apartment.apart_name}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-      <div className="input-container">
-        <input
-          id="girl"
-          type="text"
-          placeholder="מתרימה"
-          value={girl.name || ""}
-          readOnly
-          onFocus={() => {
-            setShowGirlDropdown(true);
-            setFilteredGirls(girls);
-          }}
-          onBlur={() => setTimeout(() => setShowGirlDropdown(false), 100)}
-        />
-        {showGirlDropdown && filteredGirls.length > 0 && (
-          <ul className="dropdown">
-            {filteredGirls.map((girl, index) => (
-              <li
-                key={index}
-                onClick={() => {
-                  setGirl(girl);
-                  setApartment(
-                    apartments.find(
-                      (apart) => apart.apartment_id == girl.apartment_id
+        <div className="input-container">
+          <input
+            id="how"
+            type="text"
+            placeholder="אופן התרומה"
+            value={donate.how}
+            readOnly
+            onFocus={() => {
+              setShowHowDropdown(true);
+            }}
+            onBlur={() => setTimeout(() => setShowHowDropdown(false), 100)}
+          />
+          {showHowDropdown && (
+            <ul className="dropdown">
+              {howArray.map((way, index) => (
+                <li
+                  key={index}
+                  onClick={() => {
+                    setDonate({ ...donate, how: way });
+                    setShowHowDropdown(false);
+                  }}
+                >
+                  {way}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <div className="input-container">
+          <input
+            id="apartment"
+            type="text"
+            placeholder="דירה"
+            value={apartment.apart_name || ""}
+            readOnly
+            onFocus={() => {
+              setShowApartmentDropdown(true);
+              setFilteredApartments(apartments);
+            }}
+            onBlur={() =>
+              setTimeout(() => setShowApartmentDropdown(false), 100)
+            }
+          />
+          {showApartmentDropdown && filteredApartments.length > 0 && (
+            <ul className="dropdown">
+              {filteredApartments.map((apartment, index) => (
+                <li
+                  key={index}
+                  onClick={() => {
+                    console.log(`in clickapart`);
+                    setApartment(apartment);
+                    if (
+                      girl &&
+                      girl.apartment_id &&
+                      girl.apartment_id != apartment.apartment_id
                     )
-                  );
-                  setDonate({ ...donate, user_id: girl.user_id });
-                  setShowGirlDropdown(false);
-                }}
-              >
-                {girl.name}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-      <label className="checkbox-container">
-        התשלום הועבר
-        <input
-          type="checkbox"
-          checked={donate.verified}
-          onChange={(e) => setDonate({ ...donate, verified: e.target.checked })}
-        />
-        <span className="checkmark"></span>
-      </label>
-      <button type="submit" value="הוספת תרומה">
-        {donateToUpdate.id ? "עדכון תרומה" : "הוספת תרומה"}
-      </button>
-    </form>
+                      setGirl({});
+                    setShowApartmentDropdown(false);
+                  }}
+                >
+                  {apartment.apart_name}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <div className="input-container">
+          <input
+            id="girl"
+            type="text"
+            placeholder="מתרימה"
+            value={girl.name || ""}
+            readOnly
+            onFocus={() => {
+              setShowGirlDropdown(true);
+              setFilteredGirls(girls);
+            }}
+            onBlur={() => setTimeout(() => setShowGirlDropdown(false), 100)}
+          />
+          {showGirlDropdown && filteredGirls.length > 0 && (
+            <ul className="dropdown">
+              {filteredGirls.map((girl, index) => (
+                <li
+                  key={index}
+                  onClick={() => {
+                    setGirl(girl);
+                    setApartment(
+                      apartments.find(
+                        (apart) => apart.apartment_id == girl.apartment_id
+                      )
+                    );
+                    setDonate({ ...donate, user_id: girl.user_id });
+                    setShowGirlDropdown(false);
+                  }}
+                >
+                  {girl.name}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <label className="checkbox-container">
+          התשלום הועבר
+          <input
+            type="checkbox"
+            checked={donate.verified}
+            onChange={(e) =>
+              setDonate({ ...donate, verified: e.target.checked })
+            }
+          />
+          <span className="checkmark"></span>
+        </label>
+        <button type="submit" value="הוספת תרומה">
+          {donateToUpdate.id ? "עדכון תרומה" : "הוספת תרומה"}
+        </button>
+      </form>
+    </>
   );
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+
+  // קבלת רכיבי התאריך והשעה
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // חודשים ב-JavaScript מתחילים מ-0
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  const seconds = String(date.getSeconds()).padStart(2, "0");
+
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
 // const handleApartmentChange = (e) => {

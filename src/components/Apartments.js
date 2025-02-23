@@ -14,7 +14,7 @@ export default function Apartments() {
   const showApartments = adpartmentsDonations.map((apartment, index) => (
     <ApartmentAmount key={index} apartment={apartment} />
   ));
-  return <div>{showApartments}</div>;
+  return <div className="box">{showApartments}</div>;
 }
 
 

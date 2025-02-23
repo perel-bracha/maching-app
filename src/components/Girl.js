@@ -37,7 +37,7 @@ export default function Girl() {
     <OneDonate key={index} donation={donation} setAmount={setAmount} />
   ));
   return (
-    <div>
+    <div className="box">
       <h1>{girl.name}</h1>
       <h1>סכום כולל: ₪{amount}</h1>
       {showDonations}
@@ -45,11 +45,11 @@ export default function Girl() {
   );
 }
 
-function OneDonate({ donation, setAmount }) {
+export function OneDonate({ donation, setAmount }) {
   const navigate=useNavigate();
   return (
-    <div>
-      <h3>{donation.donor_name}</h3>
+    <div className="oneDonate">
+      <h4>{donation.donor_name}</h4>
       <h4>{donation.amount}</h4>
       <input
         type="button"

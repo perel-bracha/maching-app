@@ -14,7 +14,7 @@ export default function TopApartments() {
   });
 
   const showTopApartments = topApartments.map((topApartment, index) => (
-    <ApartmentAmount key={index} apartment={topApartment} />
+    <ApartmentAmount key={index} apartment={topApartment} cln={`top${index}`}/>
   ));
 
   return (

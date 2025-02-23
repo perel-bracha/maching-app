@@ -111,6 +111,7 @@ export default function Donate({ set, setAll, setPerAll }) {
         <input type="button" value="עדכון תרומה" onClick={handleDonate} />
       </div>{" "}
       {showCircle && <CircleComponent myDonate={myDonate} />}
+      
     </>
   );
 }

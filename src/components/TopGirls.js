@@ -14,12 +14,7 @@ export default function TopGirls() {
   });
 
   const tg = topGirls.map((topGirl, index) => (
-    // <div key={index}>
-    //   {/* <h1>{index + 1}</h1> */}
-    //   <h1>{topGirl.name}</h1>
-    //   <h1>{topGirl.totalDonations}</h1>
-    // </div>
-    <GirlAmount key={index} girl={topGirl} />
+    <GirlAmount key={index} girl={topGirl} cln={`top${index}`}/>
   ));
 
   return (

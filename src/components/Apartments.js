@@ -1,20 +1,25 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { SliderMy } from "./Slider";
 import ApartmentAmount from "./ApartmentAmount";
+import '../App.css';  
+
+
 
 export default function Apartments() {
-  const [adpartmentsDonations, setAdpartmentsDonations] = useState([]);
+  const [apartmentsDonations, setApartmentsDonations] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:8080/apartments/donations")
+    fetch(`${process.env.REACT_APP_URL}/apartments/donations`)
       .then((response) => response.json())
-      .then((data) => setAdpartmentsDonations(data))
+      .then((data) => setApartmentsDonations(data))
       .catch((error) => console.log(error));
-  });
-  const showApartments = adpartmentsDonations.map((apartment, index) => (
-    <ApartmentAmount key={index} apartment={apartment} />
-  ));
-  return <div className="box">{showApartments}</div>;
+  }, []);
+
+  return (
+    <div className="apartments-container">
+      {apartmentsDonations.map((apartment, index) => (
+        
+            <ApartmentAmount key={index} apartment={apartment} />
+          
+      ))}
+    </div>
+  );
 }
-
-

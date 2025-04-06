@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export function SliderMy({ percents }) {
+export function SliderMy({ percents, apartmentId }) {
   const [displayedPercents, setDisplayedPercents] = useState(0);
 
   useEffect(() => {
@@ -30,26 +30,14 @@ export function SliderMy({ percents }) {
 
   return (
     <div className="slide">
-      <p className="first" style={paragraphStyle}>
+      <p
+        className={`first apart${apartmentId ? apartmentId : ``}`}
+        style={paragraphStyle}
+      >
         <span>{displayedPercents + "%"}</span>
       </p>
     </div>
   );
 }
 
-// export function SliderMy({ percents }) {
-//   const paragraphStyle = {
-//     width: percents + "%",
-//   };
-//   return (
-//     <div className="slide">
-//       <p className="first" style={paragraphStyle}>
-//         {" "}
-//         <span>{percents + "%"}</span>
-//       </p>
-//       {/* <p className="second">
-//         <span>{percents + "%"}</span>
-//       </p> */}
-//     </div>
-//   );
-// }
+

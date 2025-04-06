@@ -5,7 +5,9 @@ import TopApartments from "./TopApartments";
 import TopGirls from "./TopGirls";
 import Apartments from "./Apartments";
 
+
 export default function Home() {
+ 
   const componentsArray = [Apartments, Amount, TopApartments, TopGirls]; // Add your components here  const [currentIndex, setCurrentIndex] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   useEffect(() => {

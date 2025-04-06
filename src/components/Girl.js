@@ -8,7 +8,7 @@ export default function Girl() {
   const [donations, setDonations] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/donations/?userId=${girlId}`)
+    fetch(`${process.env.REACT_APP_URL}/donations/?userId=${girlId}`)
       .then((response) => response.json())
       .then((data) => {
         setDonations(data);
@@ -16,7 +16,7 @@ export default function Girl() {
       .catch((error) => console.log(error));
   });
   useEffect(() => {
-    fetch(`http://localhost:8080/users/${girlId}`)
+    fetch(`${process.env.REACT_APP_URL}/users/${girlId}`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -26,7 +26,7 @@ export default function Girl() {
       .catch((error) => console.log(error));
   }, []);
   useEffect(() => {
-    fetch(`http://localhost:8080/users/${girlId}/amount`)
+    fetch(`${process.env.REACT_APP_URL}/users/${girlId}/amount`)
       .then((response) => response.json())
       .then((data) => {
         setAmount(data.amount);
@@ -34,41 +34,46 @@ export default function Girl() {
       .catch((error) => console.log(error));
   });
   const showDonations = donations.map((donation, index) => (
-    <OneDonate key={index} donation={donation} setAmount={setAmount} />
+    <OneDonate key={index} donation={donation} setAmount={setAmount} apartmentId={girl.apartment_id}/>
   ));
   return (
-    <div className="box">
+    <>
       <h1>{girl.name}</h1>
-      <h1>סכום כולל: ₪{amount}</h1>
-      {showDonations}
-    </div>
+      <h2>סכום כולל: ₪{amount}</h2>
+      <div className="box">{showDonations}</div>
+    </>
   );
 }
 
-export function OneDonate({ donation, setAmount }) {
-  const navigate=useNavigate();
+export function OneDonate({ donation, apartmentId }) {
+  const navigate = useNavigate();
   return (
     <div className="oneDonate">
-      <h4>{donation.donor_name}</h4>
-      <h4>{donation.amount}</h4>
-      <input
-        type="button"
-        value="x"
-        className="x"
-        title="מחק"
-        onClick={() => {
-          //   fetch("http://localhost:8080/donations/amount")
-          //     .then((response) => response.json())
-          //     .then((data) => {setAmount(data.amount);})
-          //     .catch((error) => console.log(error));
-          fetch(`http://localhost:8080/donations/${donation.id}`, {
-            method: "DELETE",
-          });
-        }}
-      />
-      <input type="button" className="edit" title="ערוך" onClick={()=>navigate(`/donate/${donation.id}`)}>
-      
-      </input>
+      <div className={`donateButtons`}>
+        <input
+          type="button"
+          value="x"
+          className={`x apart${apartmentId ? apartmentId : ``}`}
+          title="מחק"
+          onClick={() => {
+            //   fetch("http://localhost:8080/donations/amount")
+            //     .then((response) => response.json())
+            //     .then((data) => {setAmount(data.amount);})
+            //     .catch((error) => console.log(error));
+            fetch(`${process.env.REACT_APP_URL}/donations/${donation.id}`, {
+              method: "DELETE",
+            });
+          }}
+        />
+        <input
+          type="button"
+          className={`edit apart${apartmentId ? apartmentId : ``}`}
+          title="ערוך"
+          onClick={() => navigate(`/donate/${donation.id}`)}
+        ></input>
+      </div>
+      <h3>{donation.donor_name}</h3>
+      <h4>סכום: ₪{Number(donation.amount).toLocaleString()}</h4>
     </div>
   );
 }

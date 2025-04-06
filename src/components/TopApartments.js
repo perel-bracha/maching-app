@@ -5,22 +5,44 @@ export default function TopApartments() {
   const [topApartments, setTopApartments] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/apartments/top/${5}`)
+    fetch(`${process.env.REACT_APP_URL}/apartments/top/${3}`)
       .then((response) => response.json())
       .then((data) => {
         setTopApartments(data);
       })
       .catch((error) => console.log(error));
   });
+console.log(topApartments);
 
-  const showTopApartments = topApartments.map((topApartment, index) => (
-    <ApartmentAmount key={index} apartment={topApartment} cln={`top${index}`}/>
-  ));
+
+const showFirstApartments = topApartments.map(
+  (topApartment, index) =>
+    index === 0 && (
+      <ApartmentAmount
+        key={index}
+        apartment={topApartment}
+        clnTop={`top${index}`}
+      />
+    )
+);
+  const showTopApartments = topApartments.map(
+    (topApartment, index) =>
+      index !== 0 && (
+        <ApartmentAmount
+          key={index}
+          apartment={topApartment}
+          clnTop={`top${index}`}
+        />
+      )
+  );
 
   return (
     <>
       <h1>הדירות המובילות</h1>
-      {showTopApartments}
+      <div className="boxTop">
+        {showFirstApartments}
+        <div className="boxTop2">{showTopApartments}</div>
+      </div>
     </>
   );
 }

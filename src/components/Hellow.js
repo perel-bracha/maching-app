@@ -7,7 +7,7 @@ export default function Hellow() {
   return (
     <div className="flex flex-col items-center gap-4 p-4">
       {/* שורה של 6 כפתורים לניווט */}
-      <div className="flex gap-2">
+      <div className="button-container">
         <button
           className="px-4 py-2 bg-blue-500 text-white rounded-lg"
           onClick={() => navigate("/home")}
@@ -46,7 +46,7 @@ export default function Hellow() {
         </button>
       </div>
 
-      <UploadExcel path={`users`} />
+      <UploadExcel path={`users`} text={`טעינת אקסל שמות`}/>
     </div>
   );
 }
